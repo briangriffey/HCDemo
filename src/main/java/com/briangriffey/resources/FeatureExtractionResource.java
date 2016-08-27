@@ -35,7 +35,7 @@ public class FeatureExtractionResource {
         FeatureExtractionResponse.Builder builder = new FeatureExtractionResponse.Builder();
 
         extractor.getExtractedFeatures(text).toBlocking().forEach(extraction -> {
-           extraction.acceptVisitor(builder);
+            builder.withExtraction(extraction);
         });
 
         FeatureExtractionResponse response = builder.build();
