@@ -44,7 +44,7 @@ be an empty array [].
 ## Structure
 The application is structure as a standard dropwizard project. It contains a single resource, the FeatureExtractionResource, that takes a string argument. The resource then hands the string off to a set of feature extractors. Each feature extractor is responsible with taking in a piece of information, and extracting a certain kind of information. Each feature extractor hands back an RxJava Observable, allowing any of the extractors to be composed in any number of ways, and on any set of threading constructs. 
 
-The CompositeExtractor contains the 3 kinds of extractors needed for this exercise; the EmoticonExtractor, the MentionExtractor, and the StrinHtmlTitleExtractor; which itself is a composite of the UrlHtmlTitleExtractor and the StringUrlExtractor.
+The CompositeExtractor contains the 3 kinds of extractors needed for this exercise; the EmoticonExtractor, the MentionExtractor, and the StringHtmlTitleExtractor; which itself is a composite of the UrlHtmlTitleExtractor and the StringUrlExtractor.
 
 The visitor pattern is then used to transform the various Extractions into the response given back to the client. This allows us to aggregate all of our Extractions into a single colletion under one interface, but still use the implementation specific convenience methods, without doing any casting to concrete types.
 
