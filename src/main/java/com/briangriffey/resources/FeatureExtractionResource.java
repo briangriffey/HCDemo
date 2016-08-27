@@ -24,6 +24,14 @@ public class FeatureExtractionResource {
         this.extractor = new CompositeTextExtractor(client, Schedulers.io());
     }
 
+    /**
+     * Endpoint that will extract all of the features from a given item of text. Currently this uses the
+     * {@link CompositeTextExtractor composite text extractor} to pull out emoticons, mentions, and html information
+     * from a piece of text
+     * @param text Any string that you want to extract features from
+     * @return A {@link FeatureExtractionResponse Feature extraction response} that contains the extracted emoticon,
+     * mentions, and html information.
+     */
     @POST
     @Timed
     public FeatureExtractionResponse extractFeaturesFromText(String text) {
