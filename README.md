@@ -67,9 +67,9 @@ docker run -d -p 8080:8080 hipchatdemo/briangriffey
 ```
 
 #Deviations
-1.There are some small deviations from teh isntructions below. Since no resources were present to start with the REST standard
+1. There are some small deviations from teh isntructions below. Since no resources were present to start with the REST standard
 was not used; instead a single POST was implemented.
-2.Mentions were implemented slightly differently so that email addresses were not recognized as mentions. In order to be a mention
+2. Mentions were implemented slightly differently so that email addresses were not recognized as mentions. In order to be a mention
 the string must start with @ and must be preceeded by either a whitespace character, or be at the beginning of a sentence
 
 #Instructions
