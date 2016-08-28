@@ -38,7 +38,7 @@ With an example response of
 }
 ```
 
-The response will always contain the mentions,emoticons, and links keys. If no values are found then the value for that key will
+The response will always contain the mentions, emoticons, and links keys. If no values are found then the value for that key will
 be an empty array [].
 
 ## Structure
@@ -76,10 +76,10 @@ docker run -d -p 8080:8080 hipchatdemo/briangriffey
 ```
 
 #Deviations
-1. There are some small deviations from teh isntructions below. Since no resources were present to start with the REST standard
+1. There are some small deviations from the instructions below. Since no resources were present to start with, the REST standard
 was not used; instead a single POST was implemented.
 2. Mentions were implemented slightly differently so that email addresses were not recognized as mentions. In order to be a mention
-the string must start with @ and must be preceeded by either a whitespace character, or be at the beginning of a sentence
+the string must start with @ and must be preceeded by either a whitespace character, or be at the beginning of the string
 
 #Instructions
 Here are the given instructions from the project
