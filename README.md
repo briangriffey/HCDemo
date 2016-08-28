@@ -5,46 +5,47 @@ a POST of text/plain and returns a json object.
 
 An example curl is 
 ```
-curl -X POST -H "Cache-Control: no-cache" -d 'Hey @brian how (now) (brown) (cow) http://www.twitter.com. Isn'"'"'t this just the best @tom. I think that it is (areyoukiddingme) http://www.google.com http://www.foxnews.com/index.html' "http://localhost:8080/extractfeatures"
+curl -X POST -H "Cache-Control: no-cache" -H "Postman-Token: 7f59810f-91e7-6cad-bf4b-84834b6c2080" -d 'Hey @brian how (now) (brown) (cow) http://www.twitter.com. Isn'"'"'t this just the best @tom. I think that it is (areyoukiddingme) http://www.asdfoimqweroijqweor.com http://www.google.com http://reddit.com/r/programming ' "http://localhost:8080/extractfeatures"
 ```
 
 With an example response of
 ```
 {
-  "mentions": [
-    "brian",
-    "tom"
+  "mentions":[
+     "brian","tom"
   ],
-  "emoticons": [
-    "now",
-    "brown",
-    "cow",
-    "areyoukiddingme"
+  "emoticons":[
+     "now",
+     "brown",
+     "cow",
+     "areyoukiddingme"
   ],
-  "links": [
-    {
-      "url": "http://www.google.com",
-      "title": "Google"
-    },
-    {
-      "url": "http://www.foxnews.com/index.html",
-      "title": "Fox News - Breaking News Updates | Latest News Headlines | Photos & News Videos"
-    },
-    {
-      "url": "http://www.twitter.com",
-      "title": "Twitter - see what's happening"
-    }
+  "links":[
+      {
+        "url":"http://www.google.com",
+        "title":"Google"
+      },{
+        "url":"http://reddit.com/r/programming",
+        "title":"programming"
+      },
+      {
+        "url":"http://www.twitter.com",
+        "title":"Twitter - see what\u0027s happening"
+      }
+  ],
+  "errors":[
+      "UrlHtmlTitleExtractor Unknown Host: : www.asdfoimqweroijqweor.com: unknown error"
   ]
 }
 ```
 
-The response will always contain the mentions, emoticons, and links keys. If no values are found then the value for that key will
+The response will always contain the mentions, emoticons, links, and errors keys. If no values are found then the value for that key will
 be an empty array [].
 
 ## Structure
 The application is structure as a standard dropwizard project. It contains a single resource, the FeatureExtractionResource, that takes a string argument. The resource then hands the string off to a set of feature extractors. Each feature extractor is responsible with taking in a piece of information, and extracting a certain kind of information. Each feature extractor hands back an RxJava Observable, allowing any of the extractors to be composed in any number of ways, and on any set of threading constructs. 
 
-The CompositeExtractor contains the 3 kinds of extractors needed for this exercise; the EmoticonExtractor, the MentionExtractor, and the StringHtmlTitleExtractor; which itself is a composite of the UrlHtmlTitleExtractor and the StringUrlExtractor.
+The ErrorRecoveringCompositeTextExtractor contains the 4 kinds of extractors needed for this exercise; the EmoticonExtractor, the MentionExtractor, StringUrlExtractor and the ErrorResumingUrlHtmlTitleExtractor; which is a wrapper around the UrlHtmlTitleExtractor.
 
 The visitor pattern is then used to transform the various Extractions into the response given back to the client. This allows us to aggregate all of our Extractions into a single colletion under one interface, but still use the implementation specific convenience methods, without doing any casting to concrete types.
 
@@ -80,6 +81,7 @@ docker run -d -p 8080:8080 hipchatdemo/briangriffey
 was not used; instead a single POST was implemented.
 2. Mentions were implemented slightly differently so that email addresses were not recognized as mentions. In order to be a mention
 the string must start with @ and must be preceeded by either a whitespace character, or be at the beginning of the string
+3. An error block was added onto the response. If you have one piece of the response that might fail regularly, such as calling a url that might not exist, then it makes sense to return all the data that you can, and note the exception in the return. The error is also logged to an ErrorReporter internally
 
 #Instructions
 Here are the given instructions from the project
