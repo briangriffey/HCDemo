@@ -20,6 +20,11 @@ public class MentionExtractionTest {
         assertEquals("@brian", extraction.getExtraction());
     }
 
+    @Test
+    public void testUnicode() {
+        new MentionExtraction(0, 6, "@ßriän how are you?", "@ßriän");
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void testBadStartConstruction() {
         MentionExtraction extraction = new MentionExtraction(-1,6,"@brian how are you?", "@brian");

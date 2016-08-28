@@ -54,4 +54,10 @@ public class MentionExtractorTest {
         MentionExtraction extraction = iterator.next();
         assertEquals("@ohmygodthisissolongwhyisthissolongitshouldntbesolong", extraction.getExtraction());
     }
+
+    @Test
+    public void testUnicode() {
+        MentionExtraction extraction = extractor.getExtractedFeatures("Hey @Äßölt").toBlocking().first();
+        assertEquals("@Äßölt", extraction.getExtraction());
+    }
 }

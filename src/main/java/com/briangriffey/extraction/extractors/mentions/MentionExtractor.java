@@ -19,7 +19,7 @@ public class MentionExtractor extends RegexExtractor<MentionExtraction> {
      * beginning of a sentence or is proceeded by a whitespace character. This is important so that we don't match
      * email addresses
      */
-    public static final Pattern MENTION_EXTRACTION_PATTERN = Pattern.compile("^@\\w+|\\s@\\w+");
+    public static final Pattern MENTION_EXTRACTION_PATTERN = Pattern.compile("^@\\w+|\\s@\\w+", Pattern.UNICODE_CHARACTER_CLASS);
 
     @Override
     public Pattern getRegexPattern() {

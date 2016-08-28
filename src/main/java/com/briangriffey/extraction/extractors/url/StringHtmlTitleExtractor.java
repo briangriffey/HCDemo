@@ -34,6 +34,6 @@ public class StringHtmlTitleExtractor implements DataFeatureExtractor<String, Ht
     @Override
     public Observable<HtmlTitleExtraction> getExtractedFeatures(String data) {
         return urlExtractor.getExtractedFeatures(data)
-                .flatMap(urlExtraction -> htmlInfoExtractor.getExtractedFeatures(urlExtraction.getExtraction()).subscribeOn(Schedulers.io()));
+                .flatMap(urlExtraction -> htmlInfoExtractor.getExtractedFeatures(urlExtraction.getExtraction()).subscribeOn(scheduler));
     }
 }

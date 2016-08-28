@@ -2,6 +2,7 @@ package com.briangriffey.extraction.extractors.emoticons;
 
 import com.briangriffey.extraction.extractors.emoticons.EmoticonExtraction;
 import com.briangriffey.extraction.extractors.emoticons.EmoticonExtractor;
+import com.briangriffey.extraction.extractors.mentions.MentionExtraction;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -73,6 +74,12 @@ public class EmoticonExtractorTest {
         assertEquals(21, extraction.getEnd());
         assertEquals("This shouldn't(ba298) stuff)", extraction.getSource());
         assertEquals("(ba298)", extraction.getExtraction());
+    }
+
+    @Test
+    public void testUnicode() {
+        EmoticonExtraction extraction = extractor.getExtractedFeatures("Hey (Äßölt)").toBlocking().first();
+        assertEquals("(Äßölt)", extraction.getExtraction());
     }
 
     @Test

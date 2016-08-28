@@ -1,5 +1,6 @@
 package com.briangriffey.extraction;
 
+import com.briangriffey.extraction.exception.ErrorExtraction;
 import com.briangriffey.extraction.extractors.emoticons.EmoticonExtraction;
 import com.briangriffey.extraction.extractors.mentions.MentionExtraction;
 import com.briangriffey.extraction.extractors.url.HtmlTitleExtraction;
@@ -17,4 +18,5 @@ public interface ExtractionVisitor {
     void visitExtraction(HtmlTitleExtraction htmlTitleExtraction);
     void visitExtraction(MentionExtraction mentionExtration);
     void visitExtraction(EmoticonExtraction emoticonExtraction);
+    void visitExtraction(ErrorExtraction errorExtraction);
 }

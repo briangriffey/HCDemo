@@ -45,4 +45,5 @@ public class UrlExtractionTest {
 
         verify(visitor, times(1)).visitExtraction(extraction);
     }
+
 }

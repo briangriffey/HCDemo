@@ -1,9 +1,8 @@
 package com.briangriffey.extraction.extractors.url;
 
-import android.util.Patterns;
 import com.briangriffey.extraction.DataFeatureExtractor;
-import com.briangriffey.extraction.extractors.regex.HipchatRegex;
 import com.briangriffey.extraction.html.HtmlInformation;
+import com.codahale.metrics.annotation.Timed;
 import okhttp3.*;
 import okhttp3.internal.Util;
 import org.jsoup.Jsoup;
@@ -25,6 +24,7 @@ public class UrlHtmlTitleExtractor implements DataFeatureExtractor<URL, HtmlTitl
     }
 
     @Override
+    @Timed
     public Observable<HtmlTitleExtraction> getExtractedFeatures(final URL uri) {
 
         //don't have anything, then just return nothing

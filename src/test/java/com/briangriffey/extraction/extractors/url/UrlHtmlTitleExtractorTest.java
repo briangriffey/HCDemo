@@ -11,6 +11,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.Iterator;
 
 import static org.junit.Assert.assertEquals;
@@ -73,5 +74,16 @@ public class UrlHtmlTitleExtractorTest extends MockWebServerTest{
     public void testNullThings() {
         Iterator<HtmlTitleExtraction> iterator = extractor.getExtractedFeatures(null).toBlocking().getIterator();
         iterator.next();
+    }
+
+    @Test(expected = UnknownHostException.class)
+    public void testBadHost() throws Throwable {
+
+        try {
+            extractor.getExtractedFeatures(new URL("http://www.suoijwerq.com")).toBlocking().first();
+        } catch(Exception e) {
+            throw e.getCause();
+        }
+
     }
 }

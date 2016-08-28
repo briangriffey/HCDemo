@@ -1,7 +1,7 @@
 package com.briangriffey.extraction.extractors.regex;
 
-import com.briangriffey.extraction.Extraction;
 import com.briangriffey.extraction.DataFeatureExtractor;
+import com.briangriffey.extraction.Extraction;
 import rx.Observable;
 
 import java.util.regex.Matcher;

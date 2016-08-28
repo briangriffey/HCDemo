@@ -1,5 +1,6 @@
 package com.briangriffey;
 
+import com.briangriffey.health.ErrorReporter;
 import com.briangriffey.health.FeatureExtractionHealthCheck;
 import com.briangriffey.resources.FeatureExtractionResource;
 import com.briangriffey.responses.GsonJerseyProvider;
@@ -37,7 +38,9 @@ public class BrianGriffeyApplication extends Application<BrianGriffeyConfigurati
         OkHttpClient client = new OkHttpClient.Builder()
                 .build();
 
-        FeatureExtractionResource resource = new FeatureExtractionResource(client);
+        ErrorReporter reporter = new ErrorReporter();
+
+        FeatureExtractionResource resource = new FeatureExtractionResource(client, reporter);
 
         environment.jersey().register(resource);
         environment.healthChecks().register("featureextraction", new FeatureExtractionHealthCheck(resource));

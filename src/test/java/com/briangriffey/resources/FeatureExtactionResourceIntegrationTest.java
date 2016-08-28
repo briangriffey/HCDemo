@@ -49,7 +49,7 @@ public class FeatureExtactionResourceIntegrationTest {
                     String.format("http://localhost:%d/extractfeatures", RULE.getLocalPort()))
                     .request(MediaType.APPLICATION_JSON)
                     .post(Entity.entity("Hey @brian how (now) (brown) (cow) http://www.twitter.com. Isn't this just the best @tom. " +
-                                    "I think that it is (areyoukiddingme) http://www.google.com http://reddit.com/r/programming",
+                                    "I think that it is (areyoukiddingme) http://www.google.com http://reddit.com/r/programming http://www.doesnotexistinanywayfunpartygofight.com",
                             MediaType.TEXT_PLAIN))
                     .readEntity(FeatureExtractionResponse.class);
 
@@ -57,6 +57,7 @@ public class FeatureExtactionResourceIntegrationTest {
             assertEquals(2, response.getMentions().size());
             assertEquals(4, response.getEmoticons().size());
             assertEquals(3, response.getLinks().size());
+            assertEquals(1, response.getErrors().size());
 
             assertTrue(response.getMentions().contains("tom"));
             assertTrue(response.getMentions().contains("brian"));

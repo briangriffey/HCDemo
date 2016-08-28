@@ -21,6 +21,11 @@ public class EmoticonExtractionTest {
         assertEquals("(barf) that is gross", goodConstruction.getSource());
     }
 
+    @Test
+    public void testUnicode() {
+        EmoticonExtraction extraction = new EmoticonExtraction(0, 6, "(ßärf) that is gross", "(ßärf)");
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void testBadStartConstruction() {
         EmoticonExtraction extraction = new EmoticonExtraction(-1,6,"(barf) that is gross", "(barf)");

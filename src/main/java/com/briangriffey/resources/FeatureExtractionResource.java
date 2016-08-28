@@ -1,7 +1,8 @@
 package com.briangriffey.resources;
 
 
-import com.briangriffey.extraction.CompositeTextExtractor;
+import com.briangriffey.extraction.ErrorRecoveringCompositeTextExtractor;
+import com.briangriffey.health.ErrorReporter;
 import com.briangriffey.responses.featureextraction.FeatureExtractionResponse;
 import com.codahale.metrics.annotation.Timed;
 import okhttp3.OkHttpClient;
@@ -18,16 +19,17 @@ import javax.ws.rs.core.MediaType;
 @Consumes(MediaType.TEXT_PLAIN)
 public class FeatureExtractionResource {
 
-    private final CompositeTextExtractor extractor;
+    private final ErrorRecoveringCompositeTextExtractor extractor;
 
-    public FeatureExtractionResource(OkHttpClient client) {
-        this.extractor = new CompositeTextExtractor(client, Schedulers.io());
+    public FeatureExtractionResource(OkHttpClient client, ErrorReporter errorReporter) {
+        this.extractor = new ErrorRecoveringCompositeTextExtractor(client, Schedulers.io(), errorReporter);
     }
 
     /**
      * Endpoint that will extract all of the features from a given item of text. Currently this uses the
-     * {@link CompositeTextExtractor composite text extractor} to pull out emoticons, mentions, and html information
+     * {@link ErrorRecoveringCompositeTextExtractor composite text extractor} to pull out emoticons, mentions, and html information
      * from a piece of text
+     *
      * @param text Any string that you want to extract features from
      * @return A {@link FeatureExtractionResponse Feature extraction response} that contains the extracted emoticon,
      * mentions, and html information.
@@ -36,13 +38,14 @@ public class FeatureExtractionResource {
     @Timed
     public FeatureExtractionResponse extractFeaturesFromText(String text) {
 
-        if(text == null) {
+        if (text == null) {
             throw new IllegalArgumentException("the post body can not be null");
         }
 
         FeatureExtractionResponse.Builder builder = new FeatureExtractionResponse.Builder();
 
-        extractor.getExtractedFeatures(text).toBlocking().forEach(extraction -> {
+        extractor.getExtractedFeatures(text)
+                .toBlocking().forEach(extraction -> {
             builder.withExtraction(extraction);
         });
 

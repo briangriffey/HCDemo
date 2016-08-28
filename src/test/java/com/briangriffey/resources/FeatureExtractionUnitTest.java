@@ -1,6 +1,7 @@
 package com.briangriffey.resources;
 
 import com.briangriffey.extraction.extractors.url.MockWebServerTest;
+import com.briangriffey.health.ErrorReporter;
 import com.briangriffey.responses.featureextraction.FeatureExtractionResponse;
 import okhttp3.OkHttpClient;
 import okhttp3.mockwebserver.MockWebServer;
@@ -14,6 +15,7 @@ import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
 
 public class FeatureExtractionUnitTest extends MockWebServerTest {
 
@@ -27,7 +29,7 @@ public class FeatureExtractionUnitTest extends MockWebServerTest {
         this.webserver.start();
 
         this.client = new OkHttpClient();
-        this.resource = new FeatureExtractionResource(client);
+        this.resource = new FeatureExtractionResource(client, mock(ErrorReporter.class));
     }
 
     @After

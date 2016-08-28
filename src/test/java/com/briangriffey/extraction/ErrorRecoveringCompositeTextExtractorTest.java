@@ -1,9 +1,11 @@
 package com.briangriffey.extraction;
 
+import com.briangriffey.extraction.exception.ErrorExtraction;
 import com.briangriffey.extraction.extractors.emoticons.EmoticonExtraction;
 import com.briangriffey.extraction.extractors.mentions.MentionExtraction;
 import com.briangriffey.extraction.extractors.url.HtmlTitleExtraction;
 import com.briangriffey.extraction.extractors.url.MockWebServerTest;
+import com.briangriffey.health.ErrorReporter;
 import okhttp3.OkHttpClient;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.After;
@@ -19,16 +21,17 @@ import java.util.Iterator;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
-public class CompositeTextExtractorTest extends MockWebServerTest{
+public class ErrorRecoveringCompositeTextExtractorTest extends MockWebServerTest{
 
-    private CompositeTextExtractor extractor;
+    private ErrorRecoveringCompositeTextExtractor extractor;
     private MockWebServer server;
 
     @Before
     public void setup() throws IOException {
         OkHttpClient client = new OkHttpClient();
-        this.extractor = new CompositeTextExtractor(client, Schedulers.io());
+        this.extractor = new ErrorRecoveringCompositeTextExtractor(client, Schedulers.io(), mock(ErrorReporter.class));
 
         this.server = new MockWebServer();
 
@@ -76,5 +79,28 @@ public class CompositeTextExtractorTest extends MockWebServerTest{
     public void testEmpty() {
         Iterator<Extraction> extractionObservable = this.extractor.getExtractedFeatures("").toBlocking().getIterator();
         assertFalse(extractionObservable.hasNext());
+    }
+
+    @Test
+    public void testCompositeExtractionWithErrors() {
+        String text = "Hey @brian did you get your (coffee) from http://aasdjikfomoqiwermoiqwer.com ?";
+
+        Iterator<Extraction> extractionObservable = this.extractor.getExtractedFeatures(text).toBlocking().getIterator();
+        Extraction extraction = extractionObservable.next();
+
+        assertTrue(extraction instanceof MentionExtraction);
+        MentionExtraction mention = (MentionExtraction)extraction;
+        assertEquals("@brian", mention.getExtraction());
+
+        extraction = extractionObservable.next();
+        assertTrue(extraction instanceof EmoticonExtraction);
+        EmoticonExtraction emoteExtraction = (EmoticonExtraction)extraction;
+        assertEquals("(coffee)", emoteExtraction.getExtraction());
+
+
+        extraction = extractionObservable.next();
+        assertTrue(extraction instanceof ErrorExtraction);
+        ErrorExtraction title = (ErrorExtraction)extraction;
+//        assertEquals("Woot woot woot", title.getExtraction().getTitle());
     }
 }

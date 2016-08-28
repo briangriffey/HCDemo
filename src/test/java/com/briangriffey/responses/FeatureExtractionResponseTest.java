@@ -54,6 +54,7 @@ public class FeatureExtractionResponseTest {
         responseBuilder.visitExtraction((MentionExtraction) null);
         responseBuilder.visitExtraction((HtmlTitleExtraction) null);
 
+
         FeatureExtractionResponse response = responseBuilder.build();
 
         assertEquals(0, response.getLinks().size());
@@ -80,6 +81,13 @@ public class FeatureExtractionResponseTest {
         FeatureExtractionResponse response = getGoodResponse();
 
         response.getLinks().add(new UrlInfo("", ""));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testImmutableErrors() throws MalformedURLException {
+        FeatureExtractionResponse response = getGoodResponse();
+
+        response.getErrors().add("woo");
     }
 
 }
